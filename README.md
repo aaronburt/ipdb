@@ -12,16 +12,27 @@ Ready-to-use CIDR lists for every country, in formats for **nginx**, **Traefik**
 
 ## Download
 
-The files live on the [`data` branch](https://github.com/aaronburt/ipdb/tree/data). The `.txt` lists are served through the [jsDelivr](https://www.jsdelivr.com) CDN, and the full bundle comes from GitHub Releases. Swap `GB` for any [ISO country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+The files live on the [`data` branch](https://github.com/aaronburt/ipdb/tree/data). Swap `GB` for any [ISO country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
 
-| What | URL |
+**jsDelivr CDN** (recommended: fast, cached worldwide)
+
+| List | URL |
 |---|---|
 | IPv4 + IPv6 | `https://cdn.jsdelivr.net/gh/aaronburt/ipdb@data/lists/all/GB.txt` |
 | IPv4 only | `https://cdn.jsdelivr.net/gh/aaronburt/ipdb@data/lists/v4/GB.txt` |
 | IPv6 only | `https://cdn.jsdelivr.net/gh/aaronburt/ipdb@data/lists/v6/GB.txt` |
-| Everything (zip) | `https://github.com/aaronburt/ipdb/releases/latest/download/country-lists.zip` |
 
-The jsDelivr cache is purged after each update, so new lists show up within minutes.
+**Raw GitHub** (always the latest commit, any file on the branch)
+
+| List | URL |
+|---|---|
+| IPv4 + IPv6 | `https://raw.githubusercontent.com/aaronburt/ipdb/data/lists/all/GB.txt` |
+| IPv4 only | `https://raw.githubusercontent.com/aaronburt/ipdb/data/lists/v4/GB.txt` |
+| IPv6 only | `https://raw.githubusercontent.com/aaronburt/ipdb/data/lists/v6/GB.txt` |
+
+**Everything** (zip of all formats): `https://github.com/aaronburt/ipdb/releases/latest/download/country-lists.zip`
+
+The jsDelivr cache is purged after each update, so new lists show up within minutes. jsDelivr serves files up to 20 MB, so use raw GitHub for the large `nginx/geo-country.conf`.
 
 ## Formats
 
