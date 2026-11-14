@@ -106,6 +106,17 @@ jobs:
           git -c "http.extraheader=AUTHORIZATION: basic $auth" \
             push --force "https://github.com/${GITHUB_REPOSITORY}.git" data
 
+      - name: Purge jsDelivr cache for the lists
+        if: steps.dl.outputs.changed == 'true'
+        continue-on-error: true
+        run: |
+          cd work/out
+          find lists -name '*.txt' ! -name 'ATTRIBUTION.txt' > ../purge.txt
+          total="$(wc -l < ../purge.txt)"
+          failed="$(xargs -P 8 -I{} sh -c 'curl -fsS -o /dev/null --retry 2 "https://purge.jsdelivr.net/gh/${GITHUB_REPOSITORY}@data/{}" || echo {}' < ../purge.txt | wc -l)"
+          echo "Purged $((total - failed)) of $total list files from jsDelivr."
+          echo "- jsDelivr purge: $((total - failed))/$total files" >> "$GITHUB_STEP_SUMMARY"
+
       - name: Create release
         if: steps.dl.outputs.changed == 'true'
         env:
