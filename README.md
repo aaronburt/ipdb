@@ -2,7 +2,7 @@
 
 **Per-country IP lists for allowlists and geoblocking, updated automatically.**
 
-[![Update country lists](https://github.com/aaronburt/ipdb/actions/workflows/update.yml/badge.svg)](https://github.com/aaronburt/ipdb/actions/workflows/update.yml)
+[![Update country lists](https://github.com/aaronburt/ipdb/actions/workflows/update.yml/badge.svg?branch=main)](https://github.com/aaronburt/ipdb/actions/workflows/update.yml)
 [![Latest release](https://img.shields.io/github/v/release/aaronburt/ipdb?label=data)](https://github.com/aaronburt/ipdb/releases/latest)
 [![Data: CC BY 4.0](https://img.shields.io/badge/data-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 
