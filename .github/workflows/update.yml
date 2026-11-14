@@ -1,0 +1,139 @@
+name: Update country lists
+
+on:
+  schedule:
+    - cron: "17 5 * * 1"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Rebuild and republish even if the source file is unchanged"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-country-lists
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run tests
+        run: python -I tests/test_generate.py
+
+      - name: Load previous manifest from the data branch
+        run: |
+          mkdir -p work
+          if git fetch --depth=1 origin data:refs/remotes/origin/data 2>/dev/null \
+             && git show origin/data:manifest.json > work/prev-manifest.json 2>/dev/null; then
+            echo "Found previous manifest."
+          else
+            echo "No data branch yet; first run."
+            echo '{}' > work/prev-manifest.json
+          fi
+
+      - name: Download the latest DB-IP release
+        id: dl
+        env:
+          FORCE: ${{ inputs.force }}
+        run: |
+          set -euo pipefail
+          this_month="$(date -u +%Y-%m)"
+          last_month="$(date -u -d "$(date -u +%Y-%m-01) -1 month" +%Y-%m)"
+          found=""
+          for ym in "$this_month" "$last_month"; do
+            url="https://download.db-ip.com/free/dbip-country-lite-${ym}.csv.gz"
+            if curl -fsSL --retry 3 --retry-delay 5 -o work/source.csv.gz "$url"; then
+              found="$ym"; break
+            fi
+            echo "Not available: $url"
+          done
+          if [ -z "$found" ]; then
+            echo "::error::Could not download a DB-IP country file for $this_month or $last_month"
+            exit 1
+          fi
+          gzip -t work/source.csv.gz
+          sha="$(sha256sum work/source.csv.gz | cut -d' ' -f1)"
+          prev="$(python3 -I -c "import json;print(json.load(open('work/prev-manifest.json')).get('source',{}).get('sha256',''))")"
+          echo "month=$found" >> "$GITHUB_OUTPUT"
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+          if [ "$sha" = "$prev" ] && [ "$FORCE" != "true" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Source unchanged ($found, $sha). Nothing to do."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "New source: $found ($sha)"
+          fi
+
+      - name: Generate lists
+        if: steps.dl.outputs.changed == 'true'
+        run: |
+          python -I scripts/generate.py \
+            --input work/source.csv.gz \
+            --source-url "${{ steps.dl.outputs.url }}" \
+            --out work/out
+
+      - name: Publish to the data branch
+        if: steps.dl.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MONTH: ${{ steps.dl.outputs.month }}
+          SHA: ${{ steps.dl.outputs.sha }}
+        run: |
+          set -euo pipefail
+          cd work/out
+          git init -q -b data
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Update lists from DB-IP ${MONTH} (source sha256 ${SHA:0:12})" \
+            -m "Contains data from IP to Country Lite by DB-IP.com, CC BY 4.0. Modified: merged, converted to CIDR, grouped by country."
+          auth="$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
+          echo "::add-mask::$auth"
+          git -c "http.extraheader=AUTHORIZATION: basic $auth" \
+            push --force "https://github.com/${GITHUB_REPOSITORY}.git" data
+
+      - name: Create release
+        if: steps.dl.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MONTH: ${{ steps.dl.outputs.month }}
+          SHA: ${{ steps.dl.outputs.sha }}
+        run: |
+          set -euo pipefail
+          cd work/out
+          zip -qr ../country-lists.zip . -x ".git/*"
+          cp manifest.json ../manifest.json
+          tag="v${MONTH}-${SHA:0:7}"
+          cat > ../notes.md <<NOTES
+          Country lists generated from DB-IP IP to Country Lite (${MONTH}).
+
+          Contains data from [IP to Country Lite](https://db-ip.com/db/download/ip-to-country-lite) by [DB-IP.com](https://db-ip.com), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Modified: IP ranges merged, converted to CIDR blocks and grouped by country.
+
+          <a href='https://db-ip.com'>IP Geolocation by DB-IP</a>
+          NOTES
+          gh release create "$tag" ../country-lists.zip ../manifest.json \
+            --title "DB-IP ${MONTH}" --notes-file ../notes.md --target "${GITHUB_SHA}"
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "### Country lists"
+            echo "- Source month: \`${{ steps.dl.outputs.month }}\`"
+            echo "- Source sha256: \`${{ steps.dl.outputs.sha }}\`"
+            echo "- Changed: \`${{ steps.dl.outputs.changed }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
