@@ -220,7 +220,25 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def output_files(out: Path):
+    return sorted(
+        p for p in out.rglob("*")
+        if p.is_file() and ".git" not in p.parts and p.suffix != ".sha256" and p.name != "SHA256SUMS"
+    )
+
+
+def write_checksums(out: Path):
+    sums = []
+    for path in output_files(out):
+        digest = sha256_file(path)
+        rel = path.relative_to(out).as_posix()
+        sums.append(f"{digest}  {rel}")
+        path.with_name(path.name + ".sha256").write_text(f"{digest}  {path.name}\n", encoding="utf-8")
+    (out / "SHA256SUMS").write_text("\n".join(sums) + "\n", encoding="utf-8")
+
+
 def write_manifest(data, out: Path, src: Path, source_url: str, stats, generated_at: str):
+    files = {p.relative_to(out).as_posix(): sha256_file(p) for p in output_files(out) if p.name != "manifest.json"}
     manifest = {
         "attribution": ATTRIBUTION,
         "source": {
@@ -232,6 +250,7 @@ def write_manifest(data, out: Path, src: Path, source_url: str, stats, generated
         },
         "generated_at": generated_at,
         "countries": {cc: {"v4_cidrs": len(f[4]), "v6_cidrs": len(f[6])} for cc, f in data.items()},
+        "files": files,
     }
     (out / "manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return manifest
@@ -261,6 +280,7 @@ def main(argv=None) -> int:
     write_outputs(data, args.out)
     generated_at = args.generated_at or datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     write_manifest(data, args.out, args.input, args.source_url, stats, generated_at)
+    write_checksums(args.out)
     print(f"wrote {len(data)} countries from {stats['rows']} rows to {args.out}")
     return 0
 

@@ -115,6 +115,24 @@ class GenerateTests(unittest.TestCase):
             self.assertEqual(len(m["source"]["sha256"]), 64)
             self.assertIn("DB-IP", m["attribution"])
 
+    def test_checksums(self):
+        import hashlib
+        with tempfile.TemporaryDirectory() as t:
+            out = Path(t) / "out"
+            generate.main(["--input", str(write(t, THREE_COL)), "--out", str(out), "--min-countries", "1"])
+            digest = hashlib.sha256((out / "traefik/AU.yml").read_bytes()).hexdigest()
+            self.assertEqual((out / "traefik/AU.yml.sha256").read_text(), f"{digest}  AU.yml\n")
+            sums = (out / "SHA256SUMS").read_text()
+            self.assertIn(f"{digest}  traefik/AU.yml\n", sums)
+            self.assertIn("  manifest.json\n", sums)
+            self.assertNotIn(".sha256", sums)
+            m = json.loads((out / "manifest.json").read_text())
+            self.assertEqual(m["files"]["traefik/AU.yml"], digest)
+            self.assertNotIn("manifest.json", m["files"])
+            import subprocess
+            r = subprocess.run(["sha256sum", "-c", "--quiet", "SHA256SUMS"], cwd=out, capture_output=True)
+            self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+
     def test_min_countries_guard(self):
         with tempfile.TemporaryDirectory() as t:
             rc = generate.main(["--input", str(write(t, THREE_COL)), "--out", str(Path(t) / "o")])

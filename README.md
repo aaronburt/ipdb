@@ -43,7 +43,8 @@ The jsDelivr cache is purged after each update, so new lists show up within minu
 | `traefik/` | `ipAllowList` middleware, one file per country |
 | `ipset/` | `ipset restore` files (`hash:net`) |
 | `nft/` | nftables sets |
-| `manifest.json` | Source version, checksum and counts per country |
+| `manifest.json` | Source version, counts per country and file hashes |
+| `SHA256SUMS` | SHA-256 of every file. Each file also has its own `.sha256` next to it. |
 
 ## Quick start
 
@@ -107,6 +108,20 @@ Then use `@gb_v4` in your rules, e.g. `ip saddr != @gb_v4 drop`.
 </details>
 
 > Big countries have tens of thousands of ranges. In nginx, prefer the `geo` map over large `allow`/`deny` files.
+
+## Verify downloads
+
+Every file has a matching `.sha256`, so a script can check a download before using it:
+
+```sh
+base=https://cdn.jsdelivr.net/gh/aaronburt/ipdb@data
+curl -fsSLO "$base/traefik/GB.yml"
+curl -fsSL "$base/traefik/GB.yml.sha256" | sha256sum -c - && cp GB.yml /etc/traefik/dynamic/
+```
+
+If the file is truncated, corrupted or a stale cached copy, the check fails and nothing is replaced. To check a whole download at once, run `sha256sum -c SHA256SUMS` in the unzipped folder.
+
+The hashes come from the same place as the files, so they catch broken downloads, not tampering.
 
 ## How it works
 
