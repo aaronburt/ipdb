@@ -14,15 +14,7 @@ Ready-to-use CIDR lists for every country, in formats for **nginx**, **Traefik**
 
 The files live on the [`data` branch](https://github.com/aaronburt/ipdb/tree/data). Swap `GB` for any [ISO country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
 
-**jsDelivr CDN** (recommended: fast, cached worldwide)
-
-| List | URL |
-|---|---|
-| IPv4 + IPv6 | `https://cdn.jsdelivr.net/gh/aaronburt/ipdb@data/lists/all/GB.txt` |
-| IPv4 only | `https://cdn.jsdelivr.net/gh/aaronburt/ipdb@data/lists/v4/GB.txt` |
-| IPv6 only | `https://cdn.jsdelivr.net/gh/aaronburt/ipdb@data/lists/v6/GB.txt` |
-
-**Raw GitHub** (always the latest commit, any file on the branch)
+Every file on the branch is available at a raw URL and always has the latest commit:
 
 | List | URL |
 |---|---|
@@ -31,8 +23,6 @@ The files live on the [`data` branch](https://github.com/aaronburt/ipdb/tree/dat
 | IPv6 only | `https://raw.githubusercontent.com/aaronburt/ipdb/data/lists/v6/GB.txt` |
 
 **Everything** (zip of all formats): `https://github.com/aaronburt/ipdb/releases/latest/download/country-lists.zip`
-
-The jsDelivr cache is purged after each update, so new lists show up within minutes. jsDelivr serves files up to 20 MB, so use raw GitHub for the large `nginx/geo-country.conf`.
 
 ## Formats
 
@@ -83,7 +73,7 @@ labels:
 <summary><b>CrowdSec</b>: ban a country</summary>
 
 ```sh
-curl -sSLO https://cdn.jsdelivr.net/gh/aaronburt/ipdb@data/lists/all/CN.txt
+curl -sSLO https://raw.githubusercontent.com/aaronburt/ipdb/data/lists/all/CN.txt
 cscli decisions import -i CN.txt --format values --duration 168h --reason geoblock
 ```
 </details>
@@ -114,7 +104,7 @@ Then use `@gb_v4` in your rules, e.g. `ip saddr != @gb_v4 drop`.
 Every file has a matching `.sha256`, so a script can check a download before using it:
 
 ```sh
-base=https://cdn.jsdelivr.net/gh/aaronburt/ipdb@data
+base=https://raw.githubusercontent.com/aaronburt/ipdb/data
 curl -fsSLO "$base/traefik/GB.yml"
 curl -fsSL "$base/traefik/GB.yml.sha256" | sha256sum -c - && cp GB.yml /etc/traefik/dynamic/
 ```
