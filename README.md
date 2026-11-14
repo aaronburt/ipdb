@@ -1,117 +1,117 @@
 # ipdb
 
-Per-country IP/CIDR lists, regenerated automatically from the free
-[DB-IP IP to Country Lite](https://db-ip.com/db/download/ip-to-country-lite)
-database, for use in allowlists and geoblocking with Traefik, CrowdSec, nginx,
-ipset/nftables and similar tools.
+**Per-country IP lists for allowlists and geoblocking, updated automatically.**
 
-> **Status: first version, not yet run against the live DB-IP file.** The
-> generator is tested on synthetic data. The first workflow run against the
-> real download is the real check of the CSV format.
+[![Update country lists](https://github.com/aaronburt/ipdb/actions/workflows/update.yml/badge.svg)](https://github.com/aaronburt/ipdb/actions/workflows/update.yml)
+[![Latest release](https://img.shields.io/github/v/release/aaronburt/ipdb?label=data)](https://github.com/aaronburt/ipdb/releases/latest)
+[![Data: CC BY 4.0](https://img.shields.io/badge/data-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 
-## Attribution
+Ready-to-use CIDR lists for every country, in formats for **nginx**, **Traefik**, **CrowdSec**, **ipset** and **nftables**. Built from the free [DB-IP](https://db-ip.com) country database and refreshed whenever DB-IP publishes a new release.
 
-This repository contains data derived from the **IP to Country Lite** database
-by **[DB-IP.com](https://db-ip.com)**, licensed under the
-[Creative Commons Attribution 4.0 International License (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/).
+---
 
-<a href='https://db-ip.com'>IP Geolocation by DB-IP</a>
+## Download
 
-- **Source:** DB-IP IP to Country Lite, <https://db-ip.com/db/download/ip-to-country-lite>
-- **Licensor:** DB-IP.com
-- **License:** CC BY 4.0, <https://creativecommons.org/licenses/by/4.0/>
-- **Changes made:** the original IP ranges were merged and converted into CIDR
-  blocks, grouped by country (and by continent / EU membership where the source
-  provides it), and written out in several plain-text and configuration
-  formats. No other changes were made to the underlying country assignments.
-- **No endorsement:** this repository is independent. It is not affiliated
-  with, or endorsed by, DB-IP.com.
+The files live on the [`data` branch](https://github.com/aaronburt/ipdb/tree/data). Swap `GB` for any [ISO country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
 
-Every generated file carries the same attribution in its header (or, for
-formats that cannot hold comments, in `manifest.json`).
+| What | URL |
+|---|---|
+| IPv4 + IPv6 | `https://raw.githubusercontent.com/aaronburt/ipdb/data/lists/all/GB.txt` |
+| IPv4 only | `https://raw.githubusercontent.com/aaronburt/ipdb/data/lists/v4/GB.txt` |
+| IPv6 only | `https://raw.githubusercontent.com/aaronburt/ipdb/data/lists/v6/GB.txt` |
+| Everything (zip) | `https://github.com/aaronburt/ipdb/releases/latest/download/country-lists.zip` |
 
-## Licensing of this repository
+## Formats
 
-- **Generated data** (everything under `lists/`, `nginx/`, `traefik/`,
-  `ipset/`, `nft/` and `manifest.json`) is a derivative of the
-  DB-IP data and is shared under **CC BY 4.0**, with the attribution above.
-  If you reuse or redistribute it, you must keep the attribution and indicate
-  any further changes you make.
-- **Code** (the generator script and GitHub Actions workflow) is covered by the
-  `LICENSE` file in this repository.
+| Folder | Use it for |
+|---|---|
+| `lists/` | Plain CIDRs, one per line. Works with almost anything. |
+| `nginx/` | `geo-country.conf` map, plus `allow/` and `deny/` includes |
+| `traefik/` | `ipAllowList` middleware, one file per country |
+| `ipset/` | `ipset restore` files (`hash:net`) |
+| `nft/` | nftables sets |
+| `manifest.json` | Source version, checksum and counts per country |
 
-## Accuracy
+## Quick start
 
-DB-IP Lite is a free subset of DB-IP's commercial data and has reduced coverage
-and accuracy. IP geolocation is never exact: some ranges will be assigned to
-the wrong country or be missing. Treat these lists as a best-effort filter,
-not as proof of where a user is located, and don't rely on them alone for
-security-critical decisions.
+<details>
+<summary><b>nginx</b>: block countries</summary>
+
+```nginx
+http {
+    include /etc/nginx/geo-country.conf;
+
+    map $geo_country $blocked {
+        default 0;
+        CN 1;
+        RU 1;
+    }
+
+    server {
+        if ($blocked) { return 403; }
+    }
+}
+```
+</details>
+
+<details>
+<summary><b>Traefik</b>: allow one country</summary>
+
+Put `traefik/GB.yml` in your file provider's directory, then attach the middleware:
+
+```yaml
+labels:
+  - "traefik.http.routers.myapp.middlewares=geo-allow-gb@file"
+```
+</details>
+
+<details>
+<summary><b>CrowdSec</b>: ban a country</summary>
+
+```sh
+curl -sSLO https://raw.githubusercontent.com/aaronburt/ipdb/data/lists/all/CN.txt
+cscli decisions import -i CN.txt --format values --duration 168h --reason geoblock
+```
+</details>
+
+<details>
+<summary><b>ipset / iptables</b></summary>
+
+```sh
+ipset restore < GB.v4.ipset
+iptables -I INPUT -m set ! --match-set geo-gb-v4 src -j DROP
+```
+</details>
+
+<details>
+<summary><b>nftables</b></summary>
+
+```sh
+nft -f GB.v4.nft
+```
+
+Then use `@gb_v4` in your rules, e.g. `ip saddr != @gb_v4 drop`.
+</details>
+
+> Big countries have tens of thousands of ranges. In nginx, prefer the `geo` map over large `allow`/`deny` files.
 
 ## How it works
 
-1. A scheduled GitHub Actions workflow checks weekly whether DB-IP has published
-   a new monthly release.
-2. If the release is new (different file / checksum from the one recorded in
-   `manifest.json`), it downloads and extracts the CSV.
-3. IP ranges are grouped by country, merged, and converted to the minimal set
-   of CIDR blocks, for IPv4 and IPv6.
-4. Per-country and per-tool files are generated, and the data is published.
-   If nothing changed, the workflow exits without writing anything.
+Every Monday a [GitHub Actions workflow](.github/workflows/update.yml) downloads the latest DB-IP file and compares its checksum to the last build. If nothing changed, it stops. If there's a new release, it merges the ranges into minimal CIDR blocks, regenerates every format, and publishes them to the `data` branch and a new [release](https://github.com/aaronburt/ipdb/releases).
 
-DB-IP updates the database monthly, so most weekly runs find nothing new.
+To run it locally (Python 3.9+, no dependencies):
 
-## Layout
-
-The workflow publishes generated files to the **`data` branch** (a single
-commit, force-pushed on each update, so history never grows) and as assets on
-each **GitHub Release**. The `main` branch holds only the code.
-
-```
-lists/v4/<CC>.txt        IPv4 CIDRs for one country (ISO 3166-1 alpha-2, e.g. GB.txt)
-lists/v6/<CC>.txt        IPv6 CIDRs for one country
-lists/all/<CC>.txt       IPv4 + IPv6 combined, one CIDR per line (also what CrowdSec imports)
-nginx/geo-country.conf   one `geo $geo_country { ... }` map covering every country
-nginx/allow/<CC>.conf    `allow <cidr>;` lines
-nginx/deny/<CC>.conf     `deny <cidr>;` lines
-traefik/<CC>.yml         file-provider snippet: ipAllowList middleware `geo-allow-<cc>`
-ipset/<CC>.v4.ipset      `ipset restore` files (hash:net), also .v6
-nft/<CC>.v4.nft          nftables set files (`nft -f`), also .v6
-manifest.json            source file, sha256, build date, CIDR counts per country
-ATTRIBUTION.txt          DB-IP attribution (also repeated in headers where comments are allowed)
+```sh
+python scripts/generate.py --input dbip-country-lite-YYYY-MM.csv.gz --out out
+python tests/test_generate.py
 ```
 
-Plain `lists/` files contain no comment lines so they can be fed to any tool;
-their attribution is in `ATTRIBUTION.txt` and `manifest.json`. Files that
-allow comments carry a header.
+## Accuracy
 
-Large countries have tens of thousands of CIDRs. For nginx prefer the single
-`geo` map over thousands of `allow`/`deny` lines, and expect big Traefik
-`sourceRange` lists to make config reloads slower.
+DB-IP Lite is a free, reduced-accuracy version of DB-IP's commercial data. Some ranges will be wrong or missing, so use these lists as a filter, not as proof of location.
 
-## Using the lists
+## Attribution and license
 
-Once the first release exists, fetch a stable URL on a schedule and reload your
-service:
+<a href='https://db-ip.com'>IP Geolocation by DB-IP</a>
 
-```
-https://raw.githubusercontent.com/aaronburt/ipdb/data/lists/all/GB.txt
-https://github.com/aaronburt/ipdb/releases/latest/download/country-lists.zip
-```
-
-## Running it yourself
-
-```
-python -I tests/test_generate.py
-python -I scripts/generate.py --input dbip-country-lite-YYYY-MM.csv.gz --out out
-```
-
-Python 3.9+, standard library only. The GitHub Actions workflow
-(`.github/workflows/update.yml`) runs weekly and on demand. It downloads this
-or last month's file, compares its SHA-256 to `manifest.json` on the `data`
-branch, and stops if nothing changed.
-
-## Contributing
-
-Issues and pull requests are welcome, especially for new output formats.
-Please do not commit generated data by hand: it is produced by the workflow.
+The lists are derived from [IP to Country Lite](https://db-ip.com/db/download/ip-to-country-lite) by [DB-IP.com](https://db-ip.com), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Changes: ranges merged, converted to CIDR and grouped by country. The generated data is shared under the same license, so if you redistribute it, keep this attribution. This project is not affiliated with or endorsed by DB-IP.
