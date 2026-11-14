@@ -1,0 +1,28 @@
+# Contains data from IP to Country Lite by DB-IP.com (https://db-ip.com), licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Modified: IP ranges merged, converted to CIDR blocks and grouped by country.
+create geo-fo-v4 hash:net family inet maxelem 65536 -exist
+flush geo-fo-v4
+add geo-fo-v4 9.246.78.0/23 -exist
+add geo-fo-v4 37.120.252.0/23 -exist
+add geo-fo-v4 46.227.112.0/21 -exist
+add geo-fo-v4 80.77.128.0/20 -exist
+add geo-fo-v4 81.18.224.0/20 -exist
+add geo-fo-v4 81.25.176.0/20 -exist
+add geo-fo-v4 88.85.32.0/19 -exist
+add geo-fo-v4 94.158.249.0/24 -exist
+add geo-fo-v4 104.28.53.0/24 -exist
+add geo-fo-v4 104.28.89.0/24 -exist
+add geo-fo-v4 172.225.176.0/24 -exist
+add geo-fo-v4 178.19.192.0/20 -exist
+add geo-fo-v4 185.74.208.0/22 -exist
+add geo-fo-v4 185.88.228.0/22 -exist
+add geo-fo-v4 185.171.172.0/22 -exist
+add geo-fo-v4 193.34.104.0/22 -exist
+add geo-fo-v4 195.80.36.0/22 -exist
+add geo-fo-v4 198.137.136.0/22 -exist
+add geo-fo-v4 212.55.32.0/20 -exist
+add geo-fo-v4 212.55.48.0/23 -exist
+add geo-fo-v4 212.55.50.0/27 -exist
+add geo-fo-v4 212.55.51.0/24 -exist
+add geo-fo-v4 212.55.52.0/22 -exist
+add geo-fo-v4 212.55.56.0/21 -exist
+add geo-fo-v4 217.172.80.0/20 -exist

@@ -1,0 +1,3 @@
+IP Geolocation by DB-IP (https://db-ip.com)
+
+Contains data from IP to Country Lite by DB-IP.com (https://db-ip.com), licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Modified: IP ranges merged, converted to CIDR blocks and grouped by country.

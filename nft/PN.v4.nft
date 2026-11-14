@@ -1,0 +1,8 @@
+# Contains data from IP to Country Lite by DB-IP.com (https://db-ip.com), licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Modified: IP ranges merged, converted to CIDR blocks and grouped by country.
+add table inet geo
+add set inet geo pn_v4 { type ipv4_addr; flags interval; auto-merge; }
+flush set inet geo pn_v4
+add element inet geo pn_v4 {
+  153.56.153.0/24,
+  179.65.132.0/23
+}

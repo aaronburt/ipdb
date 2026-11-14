@@ -1,0 +1,34 @@
+# Contains data from IP to Country Lite by DB-IP.com (https://db-ip.com), licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Modified: IP ranges merged, converted to CIDR blocks and grouped by country.
+create geo-yt-v4 hash:net family inet maxelem 65536 -exist
+flush geo-yt-v4
+add geo-yt-v4 5.102.72.0/24 -exist
+add geo-yt-v4 41.242.116.0/22 -exist
+add geo-yt-v4 80.8.192.0/21 -exist
+add geo-yt-v4 80.8.202.0/24 -exist
+add geo-yt-v4 80.8.205.0/24 -exist
+add geo-yt-v4 80.8.208.0/24 -exist
+add geo-yt-v4 80.8.216.0/24 -exist
+add geo-yt-v4 80.8.219.0/24 -exist
+add geo-yt-v4 80.8.224.0/21 -exist
+add geo-yt-v4 80.8.233.0/24 -exist
+add geo-yt-v4 80.8.234.0/24 -exist
+add geo-yt-v4 80.8.236.0/22 -exist
+add geo-yt-v4 80.8.240.0/24 -exist
+add geo-yt-v4 92.142.160.0/21 -exist
+add geo-yt-v4 92.142.168.0/23 -exist
+add geo-yt-v4 92.142.173.0/24 -exist
+add geo-yt-v4 92.142.174.0/23 -exist
+add geo-yt-v4 92.142.176.0/24 -exist
+add geo-yt-v4 92.142.183.0/24 -exist
+add geo-yt-v4 94.124.154.0/24 -exist
+add geo-yt-v4 94.124.159.0/24 -exist
+add geo-yt-v4 102.135.226.0/23 -exist
+add geo-yt-v4 102.135.229.0/24 -exist
+add geo-yt-v4 153.67.90.0/23 -exist
+add geo-yt-v4 153.67.92.0/23 -exist
+add geo-yt-v4 164.160.70.0/23 -exist
+add geo-yt-v4 193.54.33.0/24 -exist
+add geo-yt-v4 193.55.5.0/24 -exist
+add geo-yt-v4 193.248.116.128/25 -exist
+add geo-yt-v4 193.248.117.0/24 -exist
+add geo-yt-v4 193.248.118.0/24 -exist

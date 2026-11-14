@@ -1,0 +1,29 @@
+# Contains data from IP to Country Lite by DB-IP.com (https://db-ip.com), licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Modified: IP ranges merged, converted to CIDR blocks and grouped by country.
+create geo-sb-v4 hash:net family inet maxelem 65536 -exist
+flush geo-sb-v4
+add geo-sb-v4 14.137.34.0/24 -exist
+add geo-sb-v4 14.137.36.0/24 -exist
+add geo-sb-v4 57.70.174.0/23 -exist
+add geo-sb-v4 103.2.88.0/22 -exist
+add geo-sb-v4 103.9.50.0/24 -exist
+add geo-sb-v4 103.21.230.0/23 -exist
+add geo-sb-v4 103.21.248.0/24 -exist
+add geo-sb-v4 103.89.36.0/24 -exist
+add geo-sb-v4 103.115.80.0/23 -exist
+add geo-sb-v4 103.140.178.0/23 -exist
+add geo-sb-v4 103.142.98.0/23 -exist
+add geo-sb-v4 103.166.98.0/23 -exist
+add geo-sb-v4 103.175.40.0/23 -exist
+add geo-sb-v4 104.156.219.0/24 -exist
+add geo-sb-v4 150.228.196.0/23 -exist
+add geo-sb-v4 172.225.157.0/24 -exist
+add geo-sb-v4 179.65.60.0/23 -exist
+add geo-sb-v4 196.48.177.0/24 -exist
+add geo-sb-v4 196.56.177.0/24 -exist
+add geo-sb-v4 196.57.177.0/24 -exist
+add geo-sb-v4 196.58.177.0/24 -exist
+add geo-sb-v4 196.197.177.0/24 -exist
+add geo-sb-v4 196.198.177.0/24 -exist
+add geo-sb-v4 196.199.177.0/24 -exist
+add geo-sb-v4 202.1.160.0/19 -exist
+add geo-sb-v4 202.63.254.0/23 -exist

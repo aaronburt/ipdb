@@ -1,0 +1,33 @@
+# Contains data from IP to Country Lite by DB-IP.com (https://db-ip.com), licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Modified: IP ranges merged, converted to CIDR blocks and grouped by country.
+create geo-tm-v4 hash:net family inet maxelem 65536 -exist
+flush geo-tm-v4
+add geo-tm-v4 27.34.176.0/24 -exist
+add geo-tm-v4 57.90.150.0/23 -exist
+add geo-tm-v4 77.83.59.0/24 -exist
+add geo-tm-v4 93.171.174.0/24 -exist
+add geo-tm-v4 93.171.220.0/22 -exist
+add geo-tm-v4 94.102.176.0/20 -exist
+add geo-tm-v4 95.85.96.0/19 -exist
+add geo-tm-v4 103.220.0.0/22 -exist
+add geo-tm-v4 119.235.112.0/20 -exist
+add geo-tm-v4 154.30.29.0/24 -exist
+add geo-tm-v4 160.225.248.0/24 -exist
+add geo-tm-v4 163.5.71.0/24 -exist
+add geo-tm-v4 164.137.60.0/24 -exist
+add geo-tm-v4 164.137.170.0/24 -exist
+add geo-tm-v4 177.93.143.0/24 -exist
+add geo-tm-v4 178.171.66.0/23 -exist
+add geo-tm-v4 185.69.184.0/22 -exist
+add geo-tm-v4 185.246.72.0/22 -exist
+add geo-tm-v4 196.48.195.0/24 -exist
+add geo-tm-v4 196.56.195.0/24 -exist
+add geo-tm-v4 196.57.195.0/24 -exist
+add geo-tm-v4 196.58.195.0/24 -exist
+add geo-tm-v4 196.197.195.0/24 -exist
+add geo-tm-v4 196.198.195.0/24 -exist
+add geo-tm-v4 196.199.195.0/24 -exist
+add geo-tm-v4 216.250.8.0/21 -exist
+add geo-tm-v4 217.8.117.0/24 -exist
+add geo-tm-v4 217.65.78.0/24 -exist
+add geo-tm-v4 217.138.10.0/24 -exist
+add geo-tm-v4 217.174.224.0/20 -exist

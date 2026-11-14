@@ -1,0 +1,29 @@
+# Contains data from IP to Country Lite by DB-IP.com (https://db-ip.com), licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Modified: IP ranges merged, converted to CIDR blocks and grouped by country.
+create geo-ax-v4 hash:net family inet maxelem 65536 -exist
+flush geo-ax-v4
+add geo-ax-v4 82.199.160.0/21 -exist
+add geo-ax-v4 82.199.178.0/23 -exist
+add geo-ax-v4 82.199.180.0/23 -exist
+add geo-ax-v4 82.199.184.0/23 -exist
+add geo-ax-v4 82.199.186.0/25 -exist
+add geo-ax-v4 82.199.186.160/27 -exist
+add geo-ax-v4 82.199.186.192/26 -exist
+add geo-ax-v4 82.199.187.0/24 -exist
+add geo-ax-v4 82.199.188.0/22 -exist
+add geo-ax-v4 172.225.70.0/24 -exist
+add geo-ax-v4 172.225.172.0/24 -exist
+add geo-ax-v4 172.225.210.0/24 -exist
+add geo-ax-v4 185.36.150.0/24 -exist
+add geo-ax-v4 192.121.243.0/24 -exist
+add geo-ax-v4 194.110.176.0/20 -exist
+add geo-ax-v4 194.112.0.0/20 -exist
+add geo-ax-v4 212.17.160.0/23 -exist
+add geo-ax-v4 212.17.163.0/24 -exist
+add geo-ax-v4 212.17.169.0/24 -exist
+add geo-ax-v4 212.17.170.0/23 -exist
+add geo-ax-v4 212.17.172.0/22 -exist
+add geo-ax-v4 213.204.32.0/20 -exist
+add geo-ax-v4 213.204.56.0/22 -exist
+add geo-ax-v4 213.204.62.0/23 -exist
+add geo-ax-v4 216.128.16.0/23 -exist
+add geo-ax-v4 217.29.229.0/24 -exist

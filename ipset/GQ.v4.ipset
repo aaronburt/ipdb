@@ -1,0 +1,34 @@
+# Contains data from IP to Country Lite by DB-IP.com (https://db-ip.com), licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Modified: IP ranges merged, converted to CIDR blocks and grouped by country.
+create geo-gq-v4 hash:net family inet maxelem 65536 -exist
+flush geo-gq-v4
+add geo-gq-v4 41.79.48.0/22 -exist
+add geo-gq-v4 41.222.112.0/21 -exist
+add geo-gq-v4 57.82.60.0/23 -exist
+add geo-gq-v4 78.138.49.0/24 -exist
+add geo-gq-v4 84.254.159.0/24 -exist
+add geo-gq-v4 102.164.248.0/21 -exist
+add geo-gq-v4 102.213.52.0/23 -exist
+add geo-gq-v4 102.223.24.0/22 -exist
+add geo-gq-v4 105.235.224.0/20 -exist
+add geo-gq-v4 153.67.144.0/23 -exist
+add geo-gq-v4 164.137.119.0/24 -exist
+add geo-gq-v4 164.137.227.0/24 -exist
+add geo-gq-v4 164.160.84.0/22 -exist
+add geo-gq-v4 168.113.34.0/24 -exist
+add geo-gq-v4 169.239.112.0/22 -exist
+add geo-gq-v4 172.225.243.0/24 -exist
+add geo-gq-v4 172.226.70.0/24 -exist
+add geo-gq-v4 186.247.48.0/24 -exist
+add geo-gq-v4 193.251.153.0/24 -exist
+add geo-gq-v4 193.251.218.0/23 -exist
+add geo-gq-v4 193.251.222.0/23 -exist
+add geo-gq-v4 196.48.83.0/24 -exist
+add geo-gq-v4 196.56.83.0/24 -exist
+add geo-gq-v4 196.57.83.0/24 -exist
+add geo-gq-v4 196.58.83.0/24 -exist
+add geo-gq-v4 196.197.83.0/24 -exist
+add geo-gq-v4 196.198.83.0/24 -exist
+add geo-gq-v4 196.199.83.0/24 -exist
+add geo-gq-v4 196.251.240.0/22 -exist
+add geo-gq-v4 197.149.168.0/22 -exist
+add geo-gq-v4 197.214.64.0/20 -exist

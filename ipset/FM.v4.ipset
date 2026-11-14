@@ -1,0 +1,22 @@
+# Contains data from IP to Country Lite by DB-IP.com (https://db-ip.com), licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Modified: IP ranges merged, converted to CIDR blocks and grouped by country.
+create geo-fm-v4 hash:net family inet maxelem 65536 -exist
+flush geo-fm-v4
+add geo-fm-v4 14.1.90.0/23 -exist
+add geo-fm-v4 43.248.156.0/22 -exist
+add geo-fm-v4 57.70.180.0/23 -exist
+add geo-fm-v4 63.84.110.0/23 -exist
+add geo-fm-v4 103.39.252.0/22 -exist
+add geo-fm-v4 103.166.209.0/24 -exist
+add geo-fm-v4 104.156.201.0/24 -exist
+add geo-fm-v4 119.252.112.0/20 -exist
+add geo-fm-v4 124.109.8.0/21 -exist
+add geo-fm-v4 196.48.135.0/24 -exist
+add geo-fm-v4 196.56.135.0/24 -exist
+add geo-fm-v4 196.57.135.0/24 -exist
+add geo-fm-v4 196.58.135.0/24 -exist
+add geo-fm-v4 196.196.135.0/24 -exist
+add geo-fm-v4 196.197.135.0/24 -exist
+add geo-fm-v4 196.198.135.0/24 -exist
+add geo-fm-v4 196.199.135.0/24 -exist
+add geo-fm-v4 203.21.143.0/24 -exist
+add geo-fm-v4 203.24.106.0/24 -exist

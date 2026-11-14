@@ -1,0 +1,36 @@
+# Contains data from IP to Country Lite by DB-IP.com (https://db-ip.com), licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Modified: IP ranges merged, converted to CIDR blocks and grouped by country.
+create geo-bi-v4 hash:net family inet maxelem 65536 -exist
+flush geo-bi-v4
+add geo-bi-v4 2.18.11.0/24 -exist
+add geo-bi-v4 5.224.30.0/24 -exist
+add geo-bi-v4 9.170.228.0/23 -exist
+add geo-bi-v4 41.79.44.0/22 -exist
+add geo-bi-v4 41.79.224.0/22 -exist
+add geo-bi-v4 41.207.112.0/24 -exist
+add geo-bi-v4 57.82.124.0/23 -exist
+add geo-bi-v4 82.206.140.0/24 -exist
+add geo-bi-v4 102.132.116.0/24 -exist
+add geo-bi-v4 102.134.96.0/20 -exist
+add geo-bi-v4 102.201.28.0/24 -exist
+add geo-bi-v4 143.105.212.0/23 -exist
+add geo-bi-v4 154.70.196.0/22 -exist
+add geo-bi-v4 154.73.40.0/22 -exist
+add geo-bi-v4 154.73.104.0/22 -exist
+add geo-bi-v4 154.117.192.0/18 -exist
+add geo-bi-v4 154.119.0.0/19 -exist
+add geo-bi-v4 164.137.115.0/24 -exist
+add geo-bi-v4 164.137.224.0/24 -exist
+add geo-bi-v4 188.164.49.0/24 -exist
+add geo-bi-v4 196.2.8.0/21 -exist
+add geo-bi-v4 196.13.223.0/24 -exist
+add geo-bi-v4 196.48.59.0/24 -exist
+add geo-bi-v4 196.49.3.0/24 -exist
+add geo-bi-v4 196.56.59.0/24 -exist
+add geo-bi-v4 196.57.59.0/24 -exist
+add geo-bi-v4 196.58.59.0/24 -exist
+add geo-bi-v4 196.197.59.0/24 -exist
+add geo-bi-v4 196.198.59.0/24 -exist
+add geo-bi-v4 196.199.59.0/24 -exist
+add geo-bi-v4 196.223.3.0/24 -exist
+add geo-bi-v4 196.223.36.0/24 -exist
+add geo-bi-v4 197.157.192.0/22 -exist

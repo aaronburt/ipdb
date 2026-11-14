@@ -1,0 +1,15 @@
+# Contains data from IP to Country Lite by DB-IP.com (https://db-ip.com), licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Modified: IP ranges merged, converted to CIDR blocks and grouped by country.
+create geo-tv-v4 hash:net family inet maxelem 65536 -exist
+flush geo-tv-v4
+add geo-tv-v4 14.137.42.0/24 -exist
+add geo-tv-v4 57.70.170.0/23 -exist
+add geo-tv-v4 150.228.172.0/23 -exist
+add geo-tv-v4 185.55.242.0/24 -exist
+add geo-tv-v4 196.48.196.0/24 -exist
+add geo-tv-v4 196.56.196.0/24 -exist
+add geo-tv-v4 196.57.196.0/24 -exist
+add geo-tv-v4 196.58.196.0/24 -exist
+add geo-tv-v4 196.197.196.0/24 -exist
+add geo-tv-v4 196.198.196.0/24 -exist
+add geo-tv-v4 196.199.196.0/24 -exist
+add geo-tv-v4 202.2.96.0/19 -exist

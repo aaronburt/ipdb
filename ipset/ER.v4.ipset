@@ -1,0 +1,14 @@
+# Contains data from IP to Country Lite by DB-IP.com (https://db-ip.com), licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Modified: IP ranges merged, converted to CIDR blocks and grouped by country.
+create geo-er-v4 hash:net family inet maxelem 65536 -exist
+flush geo-er-v4
+add geo-er-v4 57.82.120.0/23 -exist
+add geo-er-v4 84.254.152.0/24 -exist
+add geo-er-v4 98.97.158.0/23 -exist
+add geo-er-v4 196.48.84.0/24 -exist
+add geo-er-v4 196.56.84.0/24 -exist
+add geo-er-v4 196.57.84.0/24 -exist
+add geo-er-v4 196.58.84.0/24 -exist
+add geo-er-v4 196.197.84.0/24 -exist
+add geo-er-v4 196.198.84.0/24 -exist
+add geo-er-v4 196.199.84.0/24 -exist
+add geo-er-v4 196.200.96.0/20 -exist
