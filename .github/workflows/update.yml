@@ -136,8 +136,12 @@ jobs:
 
           <a href='https://db-ip.com'>IP Geolocation by DB-IP</a>
           NOTES
-          gh release create "$tag" ../country-lists.zip ../manifest.json -R "$GITHUB_REPOSITORY" \
-            --title "DB-IP ${MONTH}" --notes-file ../notes.md --target "${GITHUB_SHA}"
+          if gh release view "$tag" -R "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release upload "$tag" ../country-lists.zip ../manifest.json -R "$GITHUB_REPOSITORY" --clobber
+          else
+            gh release create "$tag" ../country-lists.zip ../manifest.json -R "$GITHUB_REPOSITORY" \
+              --title "DB-IP ${MONTH}" --notes-file ../notes.md --target "${GITHUB_SHA}"
+          fi
 
       - name: Summary
         if: always()
